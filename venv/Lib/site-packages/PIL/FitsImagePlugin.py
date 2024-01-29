@@ -8,7 +8,6 @@
 #
 # See the README file for information on usage and redistribution.
 #
-from __future__ import annotations
 
 import math
 
@@ -52,13 +51,15 @@ class FitsImageFile(ImageFile.ImageFile):
 
         number_of_bits = int(headers[b"BITPIX"])
         if number_of_bits == 8:
-            self._mode = "L"
+            self.mode = "L"
         elif number_of_bits == 16:
-            self._mode = "I"
+            self.mode = "I"
+            # rawmode = "I;16S"
         elif number_of_bits == 32:
-            self._mode = "I"
+            self.mode = "I"
         elif number_of_bits in (-32, -64):
-            self._mode = "F"
+            self.mode = "F"
+            # rawmode = "F" if number_of_bits == -32 else "F;64F"
 
         offset = math.ceil(self.fp.tell() / 2880) * 2880
         self.tile = [("raw", (0, 0) + self.size, offset, (self.mode, 0, -1))]
